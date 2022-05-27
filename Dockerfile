@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -53,14 +53,5 @@ RUN pip install ansible ansible-lint tox netaddr
 RUN useradd -m -G users,sudo ubuntu && \
     echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-ubuntu && \
     echo "Set disable_coredump false" >> /etc/sudo.conf
-
-# Use local apt mirrors
-RUN sed -ri 's%(archive|security).ubuntu.com%cache.mirror.lstn.net%' \
-    /etc/apt/sources.list
-
-# Add Limestone CA certificate
-RUN curl https://mirror.lstn.net/limestone-ca.crt > \
-      /usr/local/share/ca-certificates/limestone-ca.crt && \
-    update-ca-certificates
 
 USER ubuntu
